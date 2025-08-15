@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: Diagnoses API
+  version: 1.0.0
+  description: API for managing client diagnoses and justifications.
+
+servers:
+  - url: http://localhost:4000
+
+paths:
+  /api/diagnoses/{clientId}:
+    get:
+      summary: Get the latest diagnosis for a client
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          description: UUID of the client
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Latest diagnosis for the client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+        "404":
+          description: No diagnosis found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create or edit a diagnosis for a client
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          description: UUID of the client
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisUpdateRequest"
+      responses:
+        "200":
+          description: Diagnosis created or updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+
+  /api/diagnoses/{id}:
+    put:
+      summary: Update an existing diagnosis by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID of the diagnosis record
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisUpdateRequest"
+      responses:
+        "200":
+          description: Diagnosis updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+        "404":
+          description: Diagnosis not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    Diagnosis:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+          format: uuid
+        diagnosisName:
+          type: string
+        predictedDate:
+          type: string
+          format: date-time
+        justification:
+          type: string
+        challengedDiagnosis:
+          type: string
+          nullable: true
+        challengedJustification:
+          type: string
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - clientId
+        - diagnosisName
+        - predictedDate
+        - justification
+        - updatedAt
+
+    DiagnosisUpdateRequest:
+      type: object
+      properties:
+        diagnosis_name:
+          type: string
+          description: New or updated diagnosis name
+        justification:
+          type: string
+          description: Justification text
+        challenged_diagnosis:
+          type: string
+          description: Challenged diagnosis name
+        challenged_justification:
+          type: string
+          description: Justification for the challenged diagnosis
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string

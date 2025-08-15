@@ -1,0 +1,14 @@
+{
+  "name": "test_project",
+  "packageManager": "yarn@4.9.1",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "server:dev": "yarn workspace server dev",
+    "server:push": "yarn workspace server push",
+    "server:seed": "yarn workspace server db:seed",
+    "ui:dev": "yarn workspace client dev"
+  }
+}
