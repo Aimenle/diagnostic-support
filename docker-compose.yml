@@ -32,7 +32,6 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-    command: sh -c "yarn push && yarn db:seed && yarn start"
 
   client:
     build:
@@ -44,9 +43,6 @@ services:
       - "3000:3000"
     depends_on:
       - server
-    volumes:
-      - ./client:/app
-      - /app/node_modules
 
 volumes:
   postgres_data:

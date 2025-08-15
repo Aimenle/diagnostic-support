@@ -9,10 +9,7 @@ import { Input, Button, Card, CardBody } from "@heroui/react";
 export default function Home() {
   const [clientId, setClientId] = useState("");
   const [searchId, setSearchId] = useState<string | null>(null);
-  const { data, error, isLoading } = useSWR(
-    searchId ? `/diagnosis/${searchId}` : null,
-    () => getDiagnosis(searchId!)
-  );
+  const { data, error, isLoading } = useSWR(searchId, getDiagnosis);
 
   const router = useRouter();
 

@@ -1,9 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 
-export const API_BASE = "http://localhost:4000";
+export const API_BASE = "http://localhost:3001";
 
 export async function getDiagnosis(clientId: string) {
   const res = await fetch(`${API_BASE}/api/diagnoses/${clientId}`);
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
   return res.json();
 }
 
@@ -16,6 +19,9 @@ export async function createOrUpdateDiagnosis(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
   return res.json();
 }
 
@@ -28,5 +34,8 @@ export async function updateDiagnosis(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
   return res.json();
 }
